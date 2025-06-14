@@ -20,7 +20,8 @@ fun SushiSecondHandClock(
     clockTicker: ClockTicker? = null,
     modifier: Modifier = Modifier
 ) {
-    // Get current seconds and milliseconds or use default values if clockTicker is null
+    // Get current minutes, seconds and milliseconds or use default values if clockTicker is null
+    val minutes = clockTicker?.minutes?.value?.toIntOrNull() ?: 0
     val seconds = clockTicker?.seconds?.value?.toIntOrNull() ?: 0
     val milliseconds = clockTicker?.milliseconds?.value?.toIntOrNull() ?: 0
 
@@ -48,21 +49,46 @@ fun SushiSecondHandClock(
         // We use the smaller dimension and subtract the sushi size to ensure it stays within bounds
         val radius = (minOf(boxWidthPx, boxHeightPx) / 2f) - sushiSize
 
-        // Calculate position using trigonometric functions
-        // cos gives x-coordinate, sin gives y-coordinate
-        val x = centerX + radius * cos(angleInRadians)
-        val y = centerY + radius * sin(angleInRadians)
+        if (minutes == 0) {
+            // When minutes are 0, display sushi emojis around the clock face
+            val numberOfSushi = 12 // Number of sushi emojis to display around the clock
+            for (i in 0 until numberOfSushi) {
+                // Calculate angle for each sushi (evenly distributed around the circle)
+                val sushiAngle = -((PI.toFloat() / 2) - (i * (2 * PI.toFloat() / numberOfSushi)))
 
-        Text(
-            text = "🍣",
-            fontSize = 60.sp,
-            modifier = Modifier.offset {
-                IntOffset(
-                    (x - sushiSize / 2).roundToInt(),
-                    (y - sushiSize / 2).roundToInt()
+                // Calculate position for each sushi
+                val sushiX = centerX + radius * cos(sushiAngle)
+                val sushiY = centerY + radius * sin(sushiAngle)
+
+                Text(
+                    text = "🍣",
+                    fontSize = 60.sp,
+                    modifier = Modifier.offset {
+                        IntOffset(
+                            (sushiX - sushiSize / 2).roundToInt(),
+                            (sushiY - sushiSize / 2).roundToInt()
+                        )
+                    }
                 )
             }
-        )
+        } else {
+            // Normal behavior: single rotating sushi emoji
+            // Calculate position using trigonometric functions
+            // cos gives x-coordinate, sin gives y-coordinate
+            val x = centerX + radius * cos(angleInRadians)
+            val y = centerY + radius * sin(angleInRadians)
+
+            Text(
+                text = "🍣",
+                fontSize = 60.sp,
+                modifier = Modifier.offset {
+                    IntOffset(
+                        (x - sushiSize / 2).roundToInt(),
+                        (y - sushiSize / 2).roundToInt()
+                    )
+                }
+            )
+        }
     }
 }
 
