@@ -33,6 +33,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.khaki.schoolwatch.localization.Language
+import org.khaki.schoolwatch.localization.stringResource
 import org.khaki.schoolwatch.theme.DraculaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,6 +46,8 @@ fun SettingsScreen(
     onAddSchedule: (String, Int, Int) -> Unit,
     showSushi: Boolean,
     onShowSushiChange: (Boolean) -> Unit,
+    language: Language = Language.JAPANESE,
+    onLanguageChange: (Language) -> Unit = {},
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -55,12 +59,12 @@ fun SettingsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("設定") },
+                title = { Text(stringResource().settings) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "戻る"
+                            contentDescription = stringResource().back
                         )
                     }
                 }
@@ -80,7 +84,7 @@ fun SettingsScreen(
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = "タスク管理",
+                    text = stringResource().taskManagement,
                     style = MaterialTheme.typography.headlineMedium
                 )
 
@@ -92,7 +96,7 @@ fun SettingsScreen(
                         value = textInput,
                         onValueChange = { textInput = it },
                         modifier = Modifier.weight(1f),
-                        placeholder = { Text("今日のタスクを追加…💖") },
+                        placeholder = { Text(stringResource().addTaskPlaceholder) },
                         singleLine = true
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -107,7 +111,7 @@ fun SettingsScreen(
                     ) {
                         Icon(
                             Icons.Filled.AddCircle,
-                            contentDescription = "タスクを追加",
+                            contentDescription = stringResource().addTask,
                             modifier = Modifier.size(36.dp),
                             tint = MaterialTheme.colorScheme.primary
                         )
@@ -118,7 +122,7 @@ fun SettingsScreen(
 
                 // Display current tasks
                 Text(
-                    text = "現在のタスク一覧",
+                    text = stringResource().currentTasks,
                     style = MaterialTheme.typography.titleLarge
                 )
 
@@ -126,14 +130,14 @@ fun SettingsScreen(
 
                 if (tasks.isEmpty()) {
                     Text(
-                        text = "タスクはありません。上記フォームから追加してください。",
+                        text = stringResource().noTasks,
                         style = MaterialTheme.typography.bodyLarge
                     )
                 } else {
                     LazyColumn {
                         items(tasks) { task ->
                             Text(
-                                text = "• ${task.text}${if (task.isCompleted) " (完了)" else ""}",
+                                text = "• ${task.text}${if (task.isCompleted) " (${stringResource().taskCompleted})" else ""}",
                                 style = MaterialTheme.typography.bodyLarge,
                                 modifier = Modifier.padding(vertical = 4.dp)
                             )
@@ -145,7 +149,7 @@ fun SettingsScreen(
 
                 // App settings section
                 Text(
-                    text = "アプリ設定",
+                    text = stringResource().appSettings,
                     style = MaterialTheme.typography.headlineMedium
                 )
 
@@ -157,7 +161,7 @@ fun SettingsScreen(
                     modifier = Modifier.padding(vertical = 8.dp)
                 ) {
                     Text(
-                        text = "寿司の表示",
+                        text = stringResource().showSushi,
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.weight(1f)
                     )
@@ -167,11 +171,51 @@ fun SettingsScreen(
                     )
                 }
 
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Language selection
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                ) {
+                    Text(
+                        text = if (language == Language.JAPANESE) "言語" else "Language",
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "日本語",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = if (language == Language.JAPANESE) 
+                                MaterialTheme.colorScheme.primary 
+                            else 
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        )
+                        Switch(
+                            checked = language == Language.ENGLISH,
+                            onCheckedChange = { isEnglish ->
+                                onLanguageChange(if (isEnglish) Language.ENGLISH else Language.JAPANESE)
+                            }
+                        )
+                        Text(
+                            text = "English",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = if (language == Language.ENGLISH) 
+                                MaterialTheme.colorScheme.primary 
+                            else 
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        )
+                    }
+                }
+
                 Spacer(modifier = Modifier.height(32.dp))
 
                 // Schedule management section
                 Text(
-                    text = "スケジュール管理",
+                    text = stringResource().scheduleManagement,
                     style = MaterialTheme.typography.headlineMedium
                 )
 
@@ -183,7 +227,7 @@ fun SettingsScreen(
                         OutlinedTextField(
                             value = scheduleTitle,
                             onValueChange = { scheduleTitle = it },
-                            placeholder = { Text("スケジュールのタイトル") },
+                            placeholder = { Text(stringResource().scheduleTitlePlaceholder) },
                             singleLine = true,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
@@ -195,7 +239,7 @@ fun SettingsScreen(
                                         scheduleHours = it 
                                     }
                                 },
-                                placeholder = { Text("時") },
+                                placeholder = { Text(stringResource().hours) },
                                 singleLine = true,
                                 modifier = Modifier.weight(1f)
                             )
@@ -207,7 +251,7 @@ fun SettingsScreen(
                                         scheduleMinutes = it 
                                     }
                                 },
-                                placeholder = { Text("分") },
+                                placeholder = { Text(stringResource().minutes) },
                                 singleLine = true,
                                 modifier = Modifier.weight(1f)
                             )
@@ -231,7 +275,7 @@ fun SettingsScreen(
                     ) {
                         Icon(
                             Icons.Filled.AddCircle,
-                            contentDescription = "スケジュールを追加",
+                            contentDescription = stringResource().addSchedule,
                             modifier = Modifier.size(36.dp),
                             tint = MaterialTheme.colorScheme.primary
                         )
@@ -242,7 +286,7 @@ fun SettingsScreen(
 
                 // Display current schedules
                 Text(
-                    text = "現在のスケジュール一覧",
+                    text = stringResource().currentSchedules,
                     style = MaterialTheme.typography.titleLarge
                 )
 
@@ -250,7 +294,7 @@ fun SettingsScreen(
 
                 if (schedules.isEmpty()) {
                     Text(
-                        text = "スケジュールはありません。上記フォームから追加してください。",
+                        text = stringResource().noSchedules,
                         style = MaterialTheme.typography.bodyLarge
                     )
                 } else {
@@ -274,12 +318,12 @@ fun SettingsScreen(
 private fun PreviewSettingsScreen() {
     DraculaTheme {
         val previewTasks = listOf(
-            Task(text = "サンプルタスク1"),
-            Task(text = "サンプルタスク2", isCompleted = true)
+            Task(text = stringResource().sampleTask1),
+            Task(text = stringResource().sampleTask2, isCompleted = true)
         )
         val previewSchedules = listOf(
-            Schedule(title = "朝の会", hours = 8, minutes = 30),
-            Schedule(title = "昼休み", hours = 12, minutes = 0)
+            Schedule(title = stringResource().morningMeeting, hours = 8, minutes = 30),
+            Schedule(title = stringResource().lunchBreak, hours = 12, minutes = 0)
         )
         SettingsScreen(
             tasks = previewTasks,

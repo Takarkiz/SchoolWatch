@@ -12,9 +12,12 @@ import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.khaki.schoolwatch.localization.JapaneseStringResources
+import org.khaki.schoolwatch.localization.StringResources
 
 class ClockTicker(
-    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default + Job())
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default + Job()),
+    private var stringResources: StringResources = JapaneseStringResources()
 ) {
     private val _hours = mutableStateOf("00")
     val hours: State<String> = _hours
@@ -43,17 +46,17 @@ class ClockTicker(
                 val year = now.year
                 val month = now.monthNumber
                 val day = now.dayOfMonth
-                val dayOfWeekJapanese = when (now.dayOfWeek) {
-                    DayOfWeek.MONDAY -> "月"
-                    DayOfWeek.TUESDAY -> "火"
-                    DayOfWeek.WEDNESDAY -> "水"
-                    DayOfWeek.THURSDAY -> "木"
-                    DayOfWeek.FRIDAY -> "金"
-                    DayOfWeek.SATURDAY -> "土"
-                    DayOfWeek.SUNDAY -> "日"
+                val dayOfWeekString = when (now.dayOfWeek) {
+                    DayOfWeek.MONDAY -> stringResources.monday
+                    DayOfWeek.TUESDAY -> stringResources.tuesday
+                    DayOfWeek.WEDNESDAY -> stringResources.wednesday
+                    DayOfWeek.THURSDAY -> stringResources.thursday
+                    DayOfWeek.FRIDAY -> stringResources.friday
+                    DayOfWeek.SATURDAY -> stringResources.saturday
+                    DayOfWeek.SUNDAY -> stringResources.sunday
                     else -> ""
                 }
-                _currentDate.value = "${year}年${month}月${day}日 (${dayOfWeekJapanese})"
+                _currentDate.value = stringResources.dateFormat(year, month, day, dayOfWeekString)
 
                 delay(1000)
             }
@@ -62,5 +65,9 @@ class ClockTicker(
 
     fun stop() {
         clockJob?.cancel()
+    }
+
+    fun updateStringResources(newStringResources: StringResources) {
+        stringResources = newStringResources
     }
 }

@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.khaki.schoolwatch.localization.stringResource
 import org.khaki.schoolwatch.theme.DraculaTheme
 
 @Composable
@@ -46,7 +47,7 @@ fun DigitalClockDisplay(
         ) {
             Icon(
                 imageVector = Icons.Default.Menu,
-                contentDescription = "設定",
+                contentDescription = stringResource().settings,
                 tint = MaterialTheme.colorScheme.onSurface
             )
         }
@@ -114,14 +115,14 @@ fun DigitalClockDisplay(
                 if (minutesUntilSchedule < 30) {
                     // Display countdown in red when less than 30 minutes remain
                     Text(
-                        text = "${nearestSchedule.title}まで${minutesUntilSchedule}分",
+                        text = stringResource().minutesUntilSchedule(nearestSchedule.title, minutesUntilSchedule),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.error // Using error color which is typically red
                     )
                 } else {
                     // Regular schedule display
                     Text(
-                        text = "次のスケジュール: ${nearestSchedule.getTimeString()} ${nearestSchedule.title}",
+                        text = stringResource().nextSchedule(nearestSchedule.getTimeString(), nearestSchedule.title),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -148,12 +149,12 @@ fun DigitalClockDisplay(
 private fun PreviewDigitalClockDisplay() {
     DraculaTheme {
         val previewTasks = listOf(
-            Task(text = "サンプルタスク1"),
-            Task(text = "サンプルタスク2", isCompleted = true)
+            Task(text = stringResource().sampleTask1),
+            Task(text = stringResource().sampleTask2, isCompleted = true)
         )
         val previewSchedules = listOf(
-            Schedule(title = "朝の会", hours = 8, minutes = 30),
-            Schedule(title = "昼休み", hours = 12, minutes = 0)
+            Schedule(title = stringResource().morningMeeting, hours = 8, minutes = 30),
+            Schedule(title = stringResource().lunchBreak, hours = 12, minutes = 0)
         )
         DigitalClockDisplay(
             hours = "12",

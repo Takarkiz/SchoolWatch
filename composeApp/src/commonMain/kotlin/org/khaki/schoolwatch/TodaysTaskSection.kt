@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.khaki.schoolwatch.localization.stringResource
 import org.khaki.schoolwatch.theme.DraculaTheme
 
 @Composable
@@ -39,7 +40,7 @@ fun TodaysTaskSection(
     Column(modifier = modifier.padding(16.dp)) {
         if (tasks.isNotEmpty()) {
             Text(
-                text = "Today's Task",
+                text = stringResource().todaysTask,
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -73,8 +74,8 @@ fun TodaysTaskSection(
 private fun PreviewTodaysTaskSection() {
     DraculaTheme {
         val previewTasks = listOf(
-            Task(text = "サンプルタスク1"),
-            Task(text = "サンプルタスク2", isCompleted = true)
+            Task(text = stringResource().sampleTask1),
+            Task(text = stringResource().sampleTask2, isCompleted = true)
         )
         TodaysTaskSection(
             tasks = previewTasks,
