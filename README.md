@@ -12,7 +12,7 @@
 
 ## 技術情報
 
-このアプリケーションは Kotlin Multiplatform と Compose Multiplatform を使用して開発されており、以下のプラットフォームで動作します：
+このアプリケーションは Kotlin Multiplatform と Compose Multiplatform を使用して開発されており、Vibe coding で作られています。以下のプラットフォームで動作します：
 - Android
 - iOS
 - Desktop
