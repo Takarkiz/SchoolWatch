@@ -28,6 +28,9 @@ class ClockTicker(
     private val _seconds = mutableStateOf("00")
     val seconds: State<String> = _seconds
 
+    private val _milliseconds = mutableStateOf("000")
+    val milliseconds: State<String> = _milliseconds
+
     private val _currentDate = mutableStateOf("2025年5月24日 (土)")
     val currentDate: State<String> = _currentDate
 
@@ -37,28 +40,37 @@ class ClockTicker(
         clockJob?.cancel()
         clockJob = scope.launch {
             while (true) {
-                val now: LocalDateTime =
-                    Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                val currentTime = Clock.System.now()
+                val now: LocalDateTime = currentTime.toLocalDateTime(TimeZone.currentSystemDefault())
+
+                // Get milliseconds from the current time
+                val millis = currentTime.toEpochMilliseconds() % 1000
+
                 _hours.value = now.hour.toString().padStart(2, '0')
                 _minutes.value = now.minute.toString().padStart(2, '0')
                 _seconds.value = now.second.toString().padStart(2, '0')
+                _milliseconds.value = millis.toString().padStart(3, '0')
 
-                val year = now.year
-                val month = now.monthNumber
-                val day = now.dayOfMonth
-                val dayOfWeekString = when (now.dayOfWeek) {
-                    DayOfWeek.MONDAY -> stringResources.monday
-                    DayOfWeek.TUESDAY -> stringResources.tuesday
-                    DayOfWeek.WEDNESDAY -> stringResources.wednesday
-                    DayOfWeek.THURSDAY -> stringResources.thursday
-                    DayOfWeek.FRIDAY -> stringResources.friday
-                    DayOfWeek.SATURDAY -> stringResources.saturday
-                    DayOfWeek.SUNDAY -> stringResources.sunday
-                    else -> ""
+                // Only update date once per second to reduce unnecessary processing
+                if (millis < 16) {
+                    val year = now.year
+                    val month = now.monthNumber
+                    val day = now.dayOfMonth
+                    val dayOfWeekString = when (now.dayOfWeek) {
+                        DayOfWeek.MONDAY -> stringResources.monday
+                        DayOfWeek.TUESDAY -> stringResources.tuesday
+                        DayOfWeek.WEDNESDAY -> stringResources.wednesday
+                        DayOfWeek.THURSDAY -> stringResources.thursday
+                        DayOfWeek.FRIDAY -> stringResources.friday
+                        DayOfWeek.SATURDAY -> stringResources.saturday
+                        DayOfWeek.SUNDAY -> stringResources.sunday
+                        else -> ""
+                    }
+                    _currentDate.value = stringResources.dateFormat(year, month, day, dayOfWeekString)
                 }
-                _currentDate.value = stringResources.dateFormat(year, month, day, dayOfWeekString)
 
-                delay(1000)
+                // Update approximately 60 times per second for smooth animation
+                delay(16)
             }
         }
     }

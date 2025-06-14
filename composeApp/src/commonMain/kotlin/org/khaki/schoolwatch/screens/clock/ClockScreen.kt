@@ -34,7 +34,7 @@ fun ClockScreen(
         contentAlignment = Alignment.Center
     ) {
         if (showSushi) {
-            SushiSecondHandClock()
+            SushiSecondHandClock(clockTicker = clockTicker)
         }
 
         DigitalClockDisplay(
