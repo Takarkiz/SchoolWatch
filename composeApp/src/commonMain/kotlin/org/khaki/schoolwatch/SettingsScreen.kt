@@ -40,12 +40,17 @@ import org.khaki.schoolwatch.theme.DraculaTheme
 fun SettingsScreen(
     tasks: List<Task>,
     onAddTask: (String) -> Unit,
+    schedules: List<Schedule>,
+    onAddSchedule: (String, Int, Int) -> Unit,
     showSushi: Boolean,
     onShowSushiChange: (Boolean) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var textInput by remember { mutableStateOf("") }
+    var scheduleTitle by remember { mutableStateOf("") }
+    var scheduleHours by remember { mutableStateOf("") }
+    var scheduleMinutes by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -161,6 +166,104 @@ fun SettingsScreen(
                         onCheckedChange = onShowSushiChange
                     )
                 }
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                // Schedule management section
+                Text(
+                    text = "スケジュール管理",
+                    style = MaterialTheme.typography.headlineMedium
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Schedule addition section
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        OutlinedTextField(
+                            value = scheduleTitle,
+                            onValueChange = { scheduleTitle = it },
+                            placeholder = { Text("スケジュールのタイトル") },
+                            singleLine = true,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                        Row {
+                            OutlinedTextField(
+                                value = scheduleHours,
+                                onValueChange = { 
+                                    if (it.isEmpty() || (it.toIntOrNull() != null && it.toInt() in 0..23)) {
+                                        scheduleHours = it 
+                                    }
+                                },
+                                placeholder = { Text("時") },
+                                singleLine = true,
+                                modifier = Modifier.weight(1f)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            OutlinedTextField(
+                                value = scheduleMinutes,
+                                onValueChange = { 
+                                    if (it.isEmpty() || (it.toIntOrNull() != null && it.toInt() in 0..59)) {
+                                        scheduleMinutes = it 
+                                    }
+                                },
+                                placeholder = { Text("分") },
+                                singleLine = true,
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    IconButton(
+                        onClick = {
+                            val hours = scheduleHours.toIntOrNull()
+                            val minutes = scheduleMinutes.toIntOrNull()
+                            if (scheduleTitle.isNotBlank() && hours != null && minutes != null) {
+                                onAddSchedule(scheduleTitle, hours, minutes)
+                                scheduleTitle = ""
+                                scheduleHours = ""
+                                scheduleMinutes = ""
+                            }
+                        },
+                        enabled = scheduleTitle.isNotBlank() && 
+                                 scheduleHours.isNotBlank() && scheduleHours.toIntOrNull() != null &&
+                                 scheduleMinutes.isNotBlank() && scheduleMinutes.toIntOrNull() != null
+                    ) {
+                        Icon(
+                            Icons.Filled.AddCircle,
+                            contentDescription = "スケジュールを追加",
+                            modifier = Modifier.size(36.dp),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Display current schedules
+                Text(
+                    text = "現在のスケジュール一覧",
+                    style = MaterialTheme.typography.titleLarge
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                if (schedules.isEmpty()) {
+                    Text(
+                        text = "スケジュールはありません。上記フォームから追加してください。",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                } else {
+                    LazyColumn {
+                        items(schedules) { schedule ->
+                            Text(
+                                text = "• ${schedule.getTimeString()} ${schedule.title}",
+                                style = MaterialTheme.typography.bodyLarge,
+                                modifier = Modifier.padding(vertical = 4.dp)
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -174,9 +277,15 @@ private fun PreviewSettingsScreen() {
             Task(text = "サンプルタスク1"),
             Task(text = "サンプルタスク2", isCompleted = true)
         )
+        val previewSchedules = listOf(
+            Schedule(title = "朝の会", hours = 8, minutes = 30),
+            Schedule(title = "昼休み", hours = 12, minutes = 0)
+        )
         SettingsScreen(
             tasks = previewTasks,
             onAddTask = { _ -> },
+            schedules = previewSchedules,
+            onAddSchedule = { _, _, _ -> },
             showSushi = true,
             onShowSushiChange = { _ -> },
             onBackClick = {}

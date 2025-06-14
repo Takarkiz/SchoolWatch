@@ -1,6 +1,5 @@
 package org.khaki.schoolwatch
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,6 +30,7 @@ fun DigitalClockDisplay(
     seconds: String,
     dateString: String,
     tasks: List<Task>,
+    schedules: List<Schedule>,
     onTaskCheckedChange: (Task, Boolean) -> Unit,
     onTaskDelete: (Task) -> Unit,
     onSettingsClick: () -> Unit = {},
@@ -89,24 +88,50 @@ fun DigitalClockDisplay(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            if (hours == "20" && minutes.toInt() <= 29) {
-                Text(
-                    text = "あと${30 - minutes.toInt()}分で終了だよ！",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.error
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
             Text(
                 text = dateString,
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f)
             )
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Find the nearest upcoming schedule
+            val currentHours = hours.toIntOrNull() ?: 0
+            val currentMinutes = minutes.toIntOrNull() ?: 0
+            val nearestSchedule = schedules
+                .filter { it.isAfterCurrentTime(currentHours, currentMinutes) }
+                .minByOrNull {
+                    (it.hours * 60 + it.minutes) - (currentHours * 60 + currentMinutes)
+                }
+
+            if (nearestSchedule != null) {
+                // Calculate time difference in minutes
+                val currentTimeInMinutes = currentHours * 60 + currentMinutes
+                val scheduleTimeInMinutes = nearestSchedule.hours * 60 + nearestSchedule.minutes
+                val minutesUntilSchedule = scheduleTimeInMinutes - currentTimeInMinutes
+
+                if (minutesUntilSchedule < 30) {
+                    // Display countdown in red when less than 30 minutes remain
+                    Text(
+                        text = "${nearestSchedule.title}まで${minutesUntilSchedule}分",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.error // Using error color which is typically red
+                    )
+                } else {
+                    // Regular schedule display
+                    Text(
+                        text = "次のスケジュール: ${nearestSchedule.getTimeString()} ${nearestSchedule.title}",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
             Spacer(
-                modifier = Modifier.height(64.dp)
+                modifier = Modifier.height(40.dp)
             )
 
             TodaysTaskSection(
@@ -126,12 +151,17 @@ private fun PreviewDigitalClockDisplay() {
             Task(text = "サンプルタスク1"),
             Task(text = "サンプルタスク2", isCompleted = true)
         )
+        val previewSchedules = listOf(
+            Schedule(title = "朝の会", hours = 8, minutes = 30),
+            Schedule(title = "昼休み", hours = 12, minutes = 0)
+        )
         DigitalClockDisplay(
             hours = "12",
             minutes = "34",
             seconds = "56",
             dateString = "2023年10月31日 (火)",
             tasks = previewTasks,
+            schedules = previewSchedules,
             onTaskCheckedChange = { _, _ -> },
             onTaskDelete = { _ -> },
             onSettingsClick = {}

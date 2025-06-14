@@ -29,6 +29,7 @@ fun App() {
         val clockTicker = remember { ClockTicker() }
         var currentScreen by remember { mutableStateOf(Screen.CLOCK) }
         val tasks = remember { mutableStateListOf<Task>() }
+        val schedules = remember { mutableStateListOf<Schedule>() }
         var showSushi by remember { mutableStateOf(true) }
 
         LaunchedEffect(Unit) {
@@ -56,6 +57,7 @@ fun App() {
                         seconds = clockTicker.seconds.value,
                         dateString = clockTicker.currentDate.value,
                         tasks = tasks,
+                        schedules = schedules,
                         onTaskCheckedChange = { task, isChecked ->
                             val index = tasks.indexOf(task)
                             if (index != -1) {
@@ -75,6 +77,10 @@ fun App() {
                     tasks = tasks,
                     onAddTask = { text ->
                         tasks.add(Task(text = text))
+                    },
+                    schedules = schedules,
+                    onAddSchedule = { title, hours, minutes ->
+                        schedules.add(Schedule(title = title, hours = hours, minutes = minutes))
                     },
                     showSushi = showSushi,
                     onShowSushiChange = { newValue ->
