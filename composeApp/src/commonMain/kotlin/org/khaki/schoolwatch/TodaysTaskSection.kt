@@ -30,38 +30,22 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.khaki.schoolwatch.theme.DraculaTheme
 
 @Composable
-fun TodaysTaskSection(modifier: Modifier = Modifier) {
-    val tasks = remember { mutableStateListOf<Task>() }
-    var textInput by remember { mutableStateOf("") }
-
+fun TodaysTaskSection(
+    tasks: List<Task>,
+    onTaskCheckedChange: (Task, Boolean) -> Unit,
+    onTaskDelete: (Task) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(modifier = modifier.padding(16.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            OutlinedTextField(
-                value = textInput,
-                onValueChange = { textInput = it },
-                modifier = Modifier.weight(1f), placeholder = { Text("今日のタスクを追加…💖") },
-                singleLine = true
+        if (tasks.isNotEmpty()) {
+            Text(
+                text = "Today's Task",
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.primary
             )
-            Spacer(modifier = Modifier.width(8.dp))
-            IconButton(
-                onClick = {
-                    if (textInput.isNotBlank()) {
-                        tasks.add(Task(text = textInput))
-                        textInput = ""
-                    }
-                },
-                enabled = textInput.isNotBlank()
-            ) {
-                Icon(
-                    Icons.Filled.AddCircle,
-                    contentDescription = "タスクを追加",
-                    modifier = Modifier.size(36.dp),
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+        }
 
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -73,13 +57,10 @@ fun TodaysTaskSection(modifier: Modifier = Modifier) {
                 TaskItem(
                     task = task,
                     onCheckedChange = { isChecked ->
-                        val index = tasks.indexOf(task)
-                        if (index != -1) {
-                            tasks[index] = task.copy(isCompleted = isChecked)
-                        }
+                        onTaskCheckedChange(task, isChecked)
                     },
                     onDeleteClick = {
-                        tasks.remove(task)
+                        onTaskDelete(task)
                     }
                 )
             }
@@ -91,7 +72,27 @@ fun TodaysTaskSection(modifier: Modifier = Modifier) {
 @Composable
 private fun PreviewTodaysTaskSection() {
     DraculaTheme {
+        val previewTasks = listOf(
+            Task(text = "サンプルタスク1"),
+            Task(text = "サンプルタスク2", isCompleted = true)
+        )
         TodaysTaskSection(
+            tasks = previewTasks,
+            onTaskCheckedChange = { _, _ -> },
+            onTaskDelete = { _ -> },
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewEmptyTodaysTaskSection() {
+    DraculaTheme {
+        TodaysTaskSection(
+            tasks = emptyList(),
+            onTaskCheckedChange = { _, _ -> },
+            onTaskDelete = { _ -> },
             modifier = Modifier.padding(16.dp)
         )
     }
