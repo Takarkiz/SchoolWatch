@@ -135,7 +135,10 @@ fun SettingsScreen(
                     )
                 } else {
                     LazyColumn {
-                        items(tasks) { task ->
+                        items(
+                            items = tasks,
+                            key = { task -> task.id }
+                        ) { task ->
                             Text(
                                 text = "• ${task.text}${if (task.isCompleted) " (${stringResource().taskCompleted})" else ""}",
                                 style = MaterialTheme.typography.bodyLarge,
@@ -189,9 +192,9 @@ fun SettingsScreen(
                         Text(
                             text = "日本語",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = if (language == Language.JAPANESE) 
-                                MaterialTheme.colorScheme.primary 
-                            else 
+                            color = if (language == Language.JAPANESE)
+                                MaterialTheme.colorScheme.primary
+                            else
                                 MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
                         Switch(
@@ -203,9 +206,9 @@ fun SettingsScreen(
                         Text(
                             text = "English",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = if (language == Language.ENGLISH) 
-                                MaterialTheme.colorScheme.primary 
-                            else 
+                            color = if (language == Language.ENGLISH)
+                                MaterialTheme.colorScheme.primary
+                            else
                                 MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
                     }
@@ -234,9 +237,9 @@ fun SettingsScreen(
                         Row {
                             OutlinedTextField(
                                 value = scheduleHours,
-                                onValueChange = { 
+                                onValueChange = {
                                     if (it.isEmpty() || (it.toIntOrNull() != null && it.toInt() in 0..23)) {
-                                        scheduleHours = it 
+                                        scheduleHours = it
                                     }
                                 },
                                 placeholder = { Text(stringResource().hours) },
@@ -246,9 +249,9 @@ fun SettingsScreen(
                             Spacer(modifier = Modifier.width(8.dp))
                             OutlinedTextField(
                                 value = scheduleMinutes,
-                                onValueChange = { 
+                                onValueChange = {
                                     if (it.isEmpty() || (it.toIntOrNull() != null && it.toInt() in 0..59)) {
-                                        scheduleMinutes = it 
+                                        scheduleMinutes = it
                                     }
                                 },
                                 placeholder = { Text(stringResource().minutes) },
@@ -269,9 +272,9 @@ fun SettingsScreen(
                                 scheduleMinutes = ""
                             }
                         },
-                        enabled = scheduleTitle.isNotBlank() && 
-                                 scheduleHours.isNotBlank() && scheduleHours.toIntOrNull() != null &&
-                                 scheduleMinutes.isNotBlank() && scheduleMinutes.toIntOrNull() != null
+                        enabled = scheduleTitle.isNotBlank() &&
+                                scheduleHours.isNotBlank() && scheduleHours.toIntOrNull() != null &&
+                                scheduleMinutes.isNotBlank() && scheduleMinutes.toIntOrNull() != null
                     ) {
                         Icon(
                             Icons.Filled.AddCircle,
