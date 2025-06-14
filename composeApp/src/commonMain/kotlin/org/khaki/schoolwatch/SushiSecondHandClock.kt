@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -60,15 +61,21 @@ fun SushiSecondHandClock(
                 val sushiX = centerX + radius * cos(sushiAngle)
                 val sushiY = centerY + radius * sin(sushiAngle)
 
+                // Calculate rotation angle for this sushi based on current time
+                // Each sushi rotates at its own position
+                val rotationAngle = (secondsWithMillis * 6) + (i * 30) // 6 degrees per second, offset by position
+
                 Text(
                     text = "🍣",
                     fontSize = 60.sp,
-                    modifier = Modifier.offset {
-                        IntOffset(
-                            (sushiX - sushiSize / 2).roundToInt(),
-                            (sushiY - sushiSize / 2).roundToInt()
-                        )
-                    }
+                    modifier = Modifier
+                        .offset {
+                            IntOffset(
+                                (sushiX - sushiSize / 2).roundToInt(),
+                                (sushiY - sushiSize / 2).roundToInt()
+                            )
+                        }
+                        .rotate(rotationAngle) // Apply rotation to the sushi emoji
                 )
             }
         } else {
