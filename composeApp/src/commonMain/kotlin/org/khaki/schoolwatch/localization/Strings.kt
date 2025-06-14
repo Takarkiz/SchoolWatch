@@ -93,8 +93,8 @@ class JapaneseStringResources : StringResources {
     override val noSchedules = "スケジュールはありません。上記フォームから追加してください。"
 
     // Digital Clock Display
-    override fun nextSchedule(time: String, title: String) = "次のスケジュール: $time $title"
-    override fun minutesUntilSchedule(title: String, minutes: Int) = "${title}まで${minutes}分"
+    override fun nextSchedule(time: String, title: String) = "次の予定: $time $title"
+    override fun minutesUntilSchedule(title: String, minutes: Int) = "${title}まで${minutes}分だよ"
 
     // Today's Task Section
     override val todaysTask = "Today's Task"

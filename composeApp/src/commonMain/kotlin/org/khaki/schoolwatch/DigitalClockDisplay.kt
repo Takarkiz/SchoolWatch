@@ -43,7 +43,7 @@ fun DigitalClockDisplay(
         // Hamburger menu in the top right corner
         IconButton(
             onClick = onSettingsClick,
-            modifier = Modifier.align(Alignment.TopEnd).padding(16.dp)
+            modifier = Modifier.align(Alignment.TopEnd).padding(8.dp)
         ) {
             Icon(
                 imageVector = Icons.Default.Menu,
