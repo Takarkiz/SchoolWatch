@@ -28,7 +28,7 @@ fun App() {
         var currentScreen by remember { mutableStateOf(Screen.CLOCK) }
         val tasks = remember { mutableStateListOf<Task>() }
         val schedules = remember { mutableStateListOf<Schedule>() }
-        var showSushi by remember { mutableStateOf(true) }
+        var showSushi by remember { mutableStateOf(false) }
         var language by remember { mutableStateOf(Language.JAPANESE) }
         val stringResources = remember(language) {
             when (language) {

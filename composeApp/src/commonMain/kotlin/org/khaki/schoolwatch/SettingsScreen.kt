@@ -6,12 +6,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
@@ -35,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.khaki.schoolwatch.localization.Language
 import org.khaki.schoolwatch.localization.stringResource
+import org.khaki.schoolwatch.theme.DraculaColors
 import org.khaki.schoolwatch.theme.DraculaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,73 +86,6 @@ fun SettingsScreen(
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.Start
             ) {
-                Text(
-                    text = stringResource().taskManagement,
-                    style = MaterialTheme.typography.headlineMedium
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Task addition section
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    OutlinedTextField(
-                        value = textInput,
-                        onValueChange = { textInput = it },
-                        modifier = Modifier.weight(1f),
-                        placeholder = { Text(stringResource().addTaskPlaceholder) },
-                        singleLine = true
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    IconButton(
-                        onClick = {
-                            if (textInput.isNotBlank()) {
-                                onAddTask(textInput)
-                                textInput = ""
-                            }
-                        },
-                        enabled = textInput.isNotBlank()
-                    ) {
-                        Icon(
-                            Icons.Filled.AddCircle,
-                            contentDescription = stringResource().addTask,
-                            modifier = Modifier.size(36.dp),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Display current tasks
-                Text(
-                    text = stringResource().currentTasks,
-                    style = MaterialTheme.typography.titleLarge
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                if (tasks.isEmpty()) {
-                    Text(
-                        text = stringResource().noTasks,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                } else {
-                    LazyColumn {
-                        items(
-                            items = tasks,
-                            key = { task -> task.id }
-                        ) { task ->
-                            Text(
-                                text = "• ${task.text}${if (task.isCompleted) " (${stringResource().taskCompleted})" else ""}",
-                                style = MaterialTheme.typography.bodyLarge,
-                                modifier = Modifier.padding(vertical = 4.dp)
-                            )
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
                 // App settings section
                 Text(
                     text = stringResource().appSettings,
@@ -158,59 +94,152 @@ fun SettingsScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Sushi display toggle
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(vertical = 8.dp)
+                // App Settings Section with background
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = DraculaColors.Comment.copy(alpha = 0.3f),
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .padding(16.dp)
                 ) {
-                    Text(
-                        text = stringResource().showSushi,
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.weight(1f)
-                    )
-                    Switch(
-                        checked = showSushi,
-                        onCheckedChange = onShowSushiChange
-                    )
+                    Column {
+                        // Sushi display toggle
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        ) {
+                            Text(
+                                text = stringResource().showSushi,
+                                style = MaterialTheme.typography.bodyLarge,
+                                modifier = Modifier.weight(1f)
+                            )
+                            Switch(
+                                checked = showSushi,
+                                onCheckedChange = onShowSushiChange
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Language selection
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        ) {
+                            Text(
+                                text = if (language == Language.JAPANESE) "言語" else "Language",
+                                style = MaterialTheme.typography.bodyLarge,
+                                modifier = Modifier.weight(1f)
+                            )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "日本語",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = if (language == Language.JAPANESE)
+                                        MaterialTheme.colorScheme.primary
+                                    else
+                                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                )
+                                Switch(
+                                    checked = language == Language.ENGLISH,
+                                    onCheckedChange = { isEnglish ->
+                                        onLanguageChange(if (isEnglish) Language.ENGLISH else Language.JAPANESE)
+                                    }
+                                )
+                                Text(
+                                    text = "English",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = if (language == Language.ENGLISH)
+                                        MaterialTheme.colorScheme.primary
+                                    else
+                                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                )
+                            }
+                        }
+                    }
                 }
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                Text(
+                    text = stringResource().taskManagement,
+                    style = MaterialTheme.typography.headlineMedium
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Language selection
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(vertical = 8.dp)
+                // Task Management Section with background
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = DraculaColors.CurrentLine,
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .padding(16.dp)
                 ) {
-                    Text(
-                        text = if (language == Language.JAPANESE) "言語" else "Language",
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.weight(1f)
-                    )
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "日本語",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = if (language == Language.JAPANESE)
-                                MaterialTheme.colorScheme.primary
-                            else
-                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                        )
-                        Switch(
-                            checked = language == Language.ENGLISH,
-                            onCheckedChange = { isEnglish ->
-                                onLanguageChange(if (isEnglish) Language.ENGLISH else Language.JAPANESE)
+                    Column {
+                        // Task addition section
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            OutlinedTextField(
+                                value = textInput,
+                                onValueChange = { textInput = it },
+                                modifier = Modifier.weight(1f),
+                                placeholder = { Text(stringResource().addTaskPlaceholder) },
+                                singleLine = true
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            IconButton(
+                                onClick = {
+                                    if (textInput.isNotBlank()) {
+                                        onAddTask(textInput)
+                                        textInput = ""
+                                    }
+                                },
+                                enabled = textInput.isNotBlank()
+                            ) {
+                                Icon(
+                                    Icons.Filled.AddCircle,
+                                    contentDescription = stringResource().addTask,
+                                    modifier = Modifier.size(36.dp),
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
                             }
-                        )
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Display current tasks
                         Text(
-                            text = "English",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = if (language == Language.ENGLISH)
-                                MaterialTheme.colorScheme.primary
-                            else
-                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                            text = stringResource().currentTasks,
+                            style = MaterialTheme.typography.titleLarge
                         )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        if (tasks.isEmpty()) {
+                            Text(
+                                text = stringResource().noTasks,
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        } else {
+                            LazyColumn {
+                                items(
+                                    items = tasks,
+                                    key = { task -> task.id }
+                                ) { task ->
+                                    Text(
+                                        text = "• ${task.text}${if (task.isCompleted) " (${stringResource().taskCompleted})" else ""}",
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        modifier = Modifier.padding(vertical = 4.dp)
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -224,90 +253,103 @@ fun SettingsScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Schedule addition section
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        OutlinedTextField(
-                            value = scheduleTitle,
-                            onValueChange = { scheduleTitle = it },
-                            placeholder = { Text(stringResource().scheduleTitlePlaceholder) },
-                            singleLine = true,
-                            modifier = Modifier.padding(bottom = 8.dp)
+                // Schedule Management Section with background
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = DraculaColors.Purple.copy(alpha = 0.2f),
+                            shape = RoundedCornerShape(16.dp)
                         )
-                        Row {
-                            OutlinedTextField(
-                                value = scheduleHours,
-                                onValueChange = {
-                                    if (it.isEmpty() || (it.toIntOrNull() != null && it.toInt() in 0..23)) {
-                                        scheduleHours = it
-                                    }
-                                },
-                                placeholder = { Text(stringResource().hours) },
-                                singleLine = true,
-                                modifier = Modifier.weight(1f)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            OutlinedTextField(
-                                value = scheduleMinutes,
-                                onValueChange = {
-                                    if (it.isEmpty() || (it.toIntOrNull() != null && it.toInt() in 0..59)) {
-                                        scheduleMinutes = it
-                                    }
-                                },
-                                placeholder = { Text(stringResource().minutes) },
-                                singleLine = true,
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    IconButton(
-                        onClick = {
-                            val hours = scheduleHours.toIntOrNull()
-                            val minutes = scheduleMinutes.toIntOrNull()
-                            if (scheduleTitle.isNotBlank() && hours != null && minutes != null) {
-                                onAddSchedule(scheduleTitle, hours, minutes)
-                                scheduleTitle = ""
-                                scheduleHours = ""
-                                scheduleMinutes = ""
+                        .padding(16.dp)
+                ) {
+                    Column {
+                        // Schedule addition section
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                OutlinedTextField(
+                                    value = scheduleTitle,
+                                    onValueChange = { scheduleTitle = it },
+                                    placeholder = { Text(stringResource().scheduleTitlePlaceholder) },
+                                    singleLine = true,
+                                    modifier = Modifier.padding(bottom = 8.dp)
+                                )
+                                Row {
+                                    OutlinedTextField(
+                                        value = scheduleHours,
+                                        onValueChange = {
+                                            if (it.isEmpty() || (it.toIntOrNull() != null && it.toInt() in 0..23)) {
+                                                scheduleHours = it
+                                            }
+                                        },
+                                        placeholder = { Text(stringResource().hours) },
+                                        singleLine = true,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    OutlinedTextField(
+                                        value = scheduleMinutes,
+                                        onValueChange = {
+                                            if (it.isEmpty() || (it.toIntOrNull() != null && it.toInt() in 0..59)) {
+                                                scheduleMinutes = it
+                                            }
+                                        },
+                                        placeholder = { Text(stringResource().minutes) },
+                                        singleLine = true,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                }
                             }
-                        },
-                        enabled = scheduleTitle.isNotBlank() &&
-                                scheduleHours.isNotBlank() && scheduleHours.toIntOrNull() != null &&
-                                scheduleMinutes.isNotBlank() && scheduleMinutes.toIntOrNull() != null
-                    ) {
-                        Icon(
-                            Icons.Filled.AddCircle,
-                            contentDescription = stringResource().addSchedule,
-                            modifier = Modifier.size(36.dp),
-                            tint = MaterialTheme.colorScheme.primary
+                            Spacer(modifier = Modifier.width(8.dp))
+                            IconButton(
+                                onClick = {
+                                    val hours = scheduleHours.toIntOrNull()
+                                    val minutes = scheduleMinutes.toIntOrNull()
+                                    if (scheduleTitle.isNotBlank() && hours != null && minutes != null) {
+                                        onAddSchedule(scheduleTitle, hours, minutes)
+                                        scheduleTitle = ""
+                                        scheduleHours = ""
+                                        scheduleMinutes = ""
+                                    }
+                                },
+                                enabled = scheduleTitle.isNotBlank() &&
+                                        scheduleHours.isNotBlank() && scheduleHours.toIntOrNull() != null &&
+                                        scheduleMinutes.isNotBlank() && scheduleMinutes.toIntOrNull() != null
+                            ) {
+                                Icon(
+                                    Icons.Filled.AddCircle,
+                                    contentDescription = stringResource().addSchedule,
+                                    modifier = Modifier.size(36.dp),
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Display current schedules
+                        Text(
+                            text = stringResource().currentSchedules,
+                            style = MaterialTheme.typography.titleLarge
                         )
-                    }
-                }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
 
-                // Display current schedules
-                Text(
-                    text = stringResource().currentSchedules,
-                    style = MaterialTheme.typography.titleLarge
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                if (schedules.isEmpty()) {
-                    Text(
-                        text = stringResource().noSchedules,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                } else {
-                    LazyColumn {
-                        items(schedules) { schedule ->
+                        if (schedules.isEmpty()) {
                             Text(
-                                text = "• ${schedule.getTimeString()} ${schedule.title}",
-                                style = MaterialTheme.typography.bodyLarge,
-                                modifier = Modifier.padding(vertical = 4.dp)
+                                text = stringResource().noSchedules,
+                                style = MaterialTheme.typography.bodyLarge
                             )
+                        } else {
+                            LazyColumn {
+                                items(schedules) { schedule ->
+                                    Text(
+                                        text = "• ${schedule.getTimeString()} ${schedule.title}",
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        modifier = Modifier.padding(vertical = 4.dp)
+                                    )
+                                }
+                            }
                         }
                     }
                 }
