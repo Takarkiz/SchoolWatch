@@ -30,17 +30,15 @@ fun DigitalClockDisplay(
 
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally, // 中身を左右中央に！
-        verticalArrangement = Arrangement.Center // 中身を上下中央に！
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        // 時間表示の部分 (これはさっきのRowの中身をそのまま持ってくる感じ！)
         Row(verticalAlignment = Alignment.CenterVertically) {
             val commonTimeStyle = MaterialTheme.typography.displayLarge.copy(
-                fontSize = 80.sp, // お好みで調整してね！
+                fontSize = 80.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
             )
-            // (コロンとか秒のスタイルは前回と同じなので省略！)
             Text(
                 text = hours,
                 style = commonTimeStyle
@@ -67,8 +65,6 @@ fun DigitalClockDisplay(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 次の予定が近づいたらここに表示をする
-        // 20時までに設定する
         if (hours == "20" && minutes.toInt() <= 29) {
             Text(
                 text = "あと${30 - minutes.toInt()}分で終了だよ！",
@@ -79,18 +75,15 @@ fun DigitalClockDisplay(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        // 日付表示の部分！💖
         Text(
             text = dateString,
-            style = MaterialTheme.typography.headlineMedium, // 時間よりは少し控えめなスタイルで！
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f) // ちょっとだけ色を薄くしてオシャレに！
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f)
         )
 
         Spacer(
             modifier = Modifier.height(64.dp)
         )
-
-        // タスクの一覧
 
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -121,17 +114,6 @@ fun DigitalClockDisplay(
                 )
             )
         }
-
-//        Row {
-//            for (i in 0..seconds.toInt() - 1) {
-//                Text(
-//                    text = "🍣",
-//                    style = TextStyle(
-//                        fontSize = 28.sp
-//                    )
-//                )
-//            }
-//        }
     }
 }
 

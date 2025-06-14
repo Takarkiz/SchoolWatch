@@ -46,11 +46,11 @@ fun TodaysTaskSection(modifier: Modifier = Modifier) {
             IconButton(
                 onClick = {
                     if (textInput.isNotBlank()) {
-                        tasks.add(Task(text = textInput)) // 新しいタスクを追加！
-                        textInput = "" // 入力欄をクリア！
+                        tasks.add(Task(text = textInput))
+                        textInput = ""
                     }
                 },
-                enabled = textInput.isNotBlank() // 何か入力されてないと押せないように！
+                enabled = textInput.isNotBlank()
             ) {
                 Icon(
                     Icons.Filled.AddCircle,
@@ -63,27 +63,23 @@ fun TodaysTaskSection(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // --- タスク一覧表示 ---
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp) // アイテム間に8dpのスペース！
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(
                 items = tasks,
-                key = { task -> task.id } // 各アイテムに一意なキーを指定！パフォーマンス向上！
+                key = { task -> task.id }
             ) { task ->
                 TaskItem(
                     task = task,
                     onCheckedChange = { isChecked ->
-                        // チェックボックスの状態が変わったら、taskのisCompletedを更新！
-                        // リスト内のオブジェクトのプロパティを直接変更しても、
-                        // mutableStateListOf が変更を検知してくれる賢い子！
                         val index = tasks.indexOf(task)
                         if (index != -1) {
                             tasks[index] = task.copy(isCompleted = isChecked)
                         }
                     },
                     onDeleteClick = {
-                        tasks.remove(task) // 削除ボタンでリストから削除！
+                        tasks.remove(task)
                     }
                 )
             }

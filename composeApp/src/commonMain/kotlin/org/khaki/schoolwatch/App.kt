@@ -19,8 +19,7 @@ fun App() {
     DraculaTheme {
         val clockTicker = remember { ClockTicker() }
 
-        // Composableが初めて画面に表示された時にクロックを開始する
-        LaunchedEffect(Unit) { // key1 = Unit なので最初の一回だけ実行
+        LaunchedEffect(Unit) {
             clockTicker.start()
         }
         Box(

@@ -1,14 +1,26 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Desktop.
+# School Watch Project
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
+このプロジェクトは Life is Tech ! School でのイベントの最中に、教室の前でスクリーンに投影するアプリケーションです。
 
-* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform, 
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+## 機能
 
+- **デジタル時計表示**: 現在の時刻と日付を大きく表示
+- **寿司の秒針**: 画面の周りを60秒かけて移動する寿司の絵文字（🍣）
+- **終了時間通知**: 20:00～20:29の間に「あとX分で終了だよ！」という通知を表示
+- **今日のタスク表示**: イベント中に行うタスクのリスト表示
+- **タスク管理機能**: タスクの追加、完了のチェック、削除が可能
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+## 技術情報
+
+このアプリケーションは Kotlin Multiplatform と Compose Multiplatform を使用して開発されており、以下のプラットフォームで動作します：
+- Android
+- iOS
+- Desktop
+
+## プロジェクト構造
+
+* `/composeApp` - Compose Multiplatform アプリケーション用の共有コード
+  - `commonMain` - すべてのターゲットで共有されるコード
+  - その他のフォルダ - 特定のプラットフォーム向けのコード
+
+* `/iosApp` - iOS アプリケーションのエントリーポイント

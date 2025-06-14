@@ -25,10 +25,8 @@ class ClockTicker(
     private val _seconds = mutableStateOf("00")
     val seconds: State<String> = _seconds
 
-    // --- ↓↓↓ 新しく日付用のStateを追加！ ↓↓↓ ---
-    private val _currentDate = mutableStateOf("2025年5月24日 (土)") // 初期値は適当でOK！すぐ更新されるから！
+    private val _currentDate = mutableStateOf("2025年5月24日 (土)")
     val currentDate: State<String> = _currentDate
-    // --- ↑↑↑ ここまで追加！ ↑↑↑ ---
 
     private var clockJob: Job? = null
 
@@ -42,9 +40,8 @@ class ClockTicker(
                 _minutes.value = now.minute.toString().padStart(2, '0')
                 _seconds.value = now.second.toString().padStart(2, '0')
 
-                // --- ↓↓↓ ここで日付も取得＆フォーマット！ ↓↓↓ ---
                 val year = now.year
-                val month = now.monthNumber // .month.value でもOK！ (kotlinx-datetimeのバージョンによるかも)
+                val month = now.monthNumber
                 val day = now.dayOfMonth
                 val dayOfWeekJapanese = when (now.dayOfWeek) {
                     DayOfWeek.MONDAY -> "月"
@@ -57,9 +54,8 @@ class ClockTicker(
                     else -> ""
                 }
                 _currentDate.value = "${year}年${month}月${day}日 (${dayOfWeekJapanese})"
-                // --- ↑↑↑ 日付取得＆フォーマットここまで！ ↑↑↑ ---
 
-                delay(1000) // 1秒待つ
+                delay(1000)
             }
         }
     }
