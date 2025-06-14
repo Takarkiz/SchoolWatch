@@ -141,7 +141,9 @@ fun ScheduleManagementSection(
                         style = MaterialTheme.typography.bodyLarge
                     )
                 } else {
-                    LazyColumn {
+                    LazyColumn(
+                        modifier = Modifier.height(150.dp)
+                    ) {
                         items(schedules) { schedule ->
                             Text(
                                 text = "• ${schedule.getTimeString()} ${schedule.title}",

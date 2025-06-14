@@ -105,7 +105,9 @@ fun TaskManagementSection(
                         style = MaterialTheme.typography.bodyLarge
                     )
                 } else {
-                    LazyColumn {
+                    LazyColumn(
+                        modifier = Modifier.height(150.dp)
+                    ) {
                         items(
                             items = tasks,
                             key = { task -> task.id }
