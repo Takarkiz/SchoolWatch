@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <!-- Common -->
+    <string name="back">戻る</string>
+    <string name="delete_task">タスクを削除</string>
+    
+    <!-- Settings Screen -->
+    <string name="settings">設定</string>
+    <string name="task_management">タスク管理</string>
+    <string name="add_task_placeholder">今日のタスクを追加…💖</string>
+    <string name="add_task">タスクを追加</string>
+    <string name="current_tasks">現在のタスク一覧</string>
+    <string name="no_tasks">タスクはありません。上記フォームから追加してください。</string>
+    <string name="task_completed">完了</string>
+    <string name="app_settings">アプリ設定</string>
+    <string name="show_sushi">寿司の表示</string>
+    <string name="schedule_management">スケジュール管理</string>
+    <string name="schedule_title_placeholder">スケジュールのタイトル</string>
+    <string name="hours">時</string>
+    <string name="minutes">分</string>
+    <string name="add_schedule">スケジュールを追加</string>
+    <string name="current_schedules">現在のスケジュール一覧</string>
+    <string name="no_schedules">スケジュールはありません。上記フォームから追加してください。</string>
+    
+    <!-- Digital Clock Display -->
+    <string name="next_schedule">次のスケジュール: %1$s %2$s</string>
+    <string name="minutes_until_schedule">%1$sまで%2$d分</string>
+    
+    <!-- Today's Task Section -->
+    <string name="todays_task">Today\'s Task</string>
+    
+    <!-- Preview Data -->
+    <string name="sample_task_1">サンプルタスク1</string>
+    <string name="sample_task_2">サンプルタスク2</string>
+    <string name="morning_meeting">朝の会</string>
+    <string name="lunch_break">昼休み</string>
+    <string name="school_dismissal">下校時間</string>
+    
+    <!-- Days of Week -->
+    <string name="monday">月</string>
+    <string name="tuesday">火</string>
+    <string name="wednesday">水</string>
+    <string name="thursday">木</string>
+    <string name="friday">金</string>
+    <string name="saturday">土</string>
+    <string name="sunday">日</string>
+    
+    <!-- Date Format -->
+    <string name="date_format">%1$d年%2$d月%3$d日 (%4$s)</string>
+</resources>

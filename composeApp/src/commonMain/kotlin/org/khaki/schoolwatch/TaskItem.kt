@@ -14,10 +14,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.khaki.schoolwatch.localization.stringResource
 import org.khaki.schoolwatch.theme.DraculaTheme
 
 @Composable
@@ -44,7 +44,7 @@ fun TaskItem(
         IconButton(onClick = onDeleteClick) {
             Icon(
                 Icons.Default.Delete,
-                contentDescription = "タスクを削除",
+                contentDescription = stringResource().deleteTask,
                 tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
         }
@@ -62,7 +62,7 @@ private fun PreviewTaskItem() {
                 ),
             task = Task(
                 id = 1,
-                text = "サンプルタスク",
+                text = stringResource().sampleTask1,
                 isCompleted = false
             ),
             onCheckedChange = {},

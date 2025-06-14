@@ -95,6 +95,10 @@ compose.desktop {
     application {
         mainClass = "org.khaki.schoolwatch.MainKt"
 
+        jvmArgs += listOf(
+            "--add-opens", "java.base/java.lang.ref=ALL-UNNAMED"
+        )
+
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "org.khaki.schoolwatch"
