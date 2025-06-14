@@ -28,9 +28,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.khaki.schoolwatch.Schedule
 import org.khaki.schoolwatch.localization.stringResource
 import org.khaki.schoolwatch.theme.DraculaColors
+import org.khaki.schoolwatch.theme.DraculaTheme
 
 @Composable
 fun ScheduleManagementSection(
@@ -41,7 +43,7 @@ fun ScheduleManagementSection(
     var scheduleTitle by remember { mutableStateOf("") }
     var scheduleHours by remember { mutableStateOf("") }
     var scheduleMinutes by remember { mutableStateOf("") }
-    
+
     Column(modifier = modifier) {
         // Schedule management section
         Text(
@@ -151,5 +153,20 @@ fun ScheduleManagementSection(
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewScheduleManagementSection() {
+    DraculaTheme {
+        val previewSchedules = listOf(
+            Schedule(title = "Morning Meeting", hours = 8, minutes = 30),
+            Schedule(title = "Lunch Break", hours = 12, minutes = 0)
+        )
+        ScheduleManagementSection(
+            schedules = previewSchedules,
+            onAddSchedule = { _, _, _ -> }
+        )
     }
 }

@@ -28,9 +28,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.khaki.schoolwatch.Task
 import org.khaki.schoolwatch.localization.stringResource
 import org.khaki.schoolwatch.theme.DraculaColors
+import org.khaki.schoolwatch.theme.DraculaTheme
 
 @Composable
 fun TaskManagementSection(
@@ -39,7 +41,7 @@ fun TaskManagementSection(
     modifier: Modifier = Modifier
 ) {
     var textInput by remember { mutableStateOf("") }
-    
+
     Column(modifier = modifier) {
         Text(
             text = stringResource().taskManagement,
@@ -118,5 +120,20 @@ fun TaskManagementSection(
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewTaskManagementSection() {
+    DraculaTheme {
+        val previewTasks = listOf(
+            Task(text = "Sample task 1"),
+            Task(text = "Sample task 2", isCompleted = true)
+        )
+        TaskManagementSection(
+            tasks = previewTasks,
+            onAddTask = { }
+        )
     }
 }

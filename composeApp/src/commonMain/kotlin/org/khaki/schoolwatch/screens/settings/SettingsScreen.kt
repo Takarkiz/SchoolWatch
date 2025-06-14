@@ -101,12 +101,12 @@ fun SettingsScreen(
 private fun PreviewSettingsScreen() {
     DraculaTheme {
         val previewTasks = listOf(
-            Task(text = stringResource().sampleTask1),
-            Task(text = stringResource().sampleTask2, isCompleted = true)
+            Task(text = "Sample task 1"),
+            Task(text = "Sample task 2", isCompleted = true)
         )
         val previewSchedules = listOf(
-            Schedule(title = stringResource().morningMeeting, hours = 8, minutes = 30),
-            Schedule(title = stringResource().lunchBreak, hours = 12, minutes = 0)
+            Schedule(title = "Morning Meeting", hours = 8, minutes = 30),
+            Schedule(title = "Lunch Break", hours = 12, minutes = 0)
         )
         SettingsScreen(
             tasks = previewTasks,

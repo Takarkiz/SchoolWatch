@@ -16,9 +16,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.khaki.schoolwatch.localization.Language
 import org.khaki.schoolwatch.localization.stringResource
 import org.khaki.schoolwatch.theme.DraculaColors
+import org.khaki.schoolwatch.theme.DraculaTheme
 
 @Composable
 fun AppSettingsSection(
@@ -105,5 +107,18 @@ fun AppSettingsSection(
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewAppSettingsSection() {
+    DraculaTheme {
+        AppSettingsSection(
+            showSushi = true,
+            onShowSushiChange = { },
+            language = Language.JAPANESE,
+            onLanguageChange = { }
+        )
     }
 }
