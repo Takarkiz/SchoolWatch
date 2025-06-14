@@ -13,6 +13,8 @@ import org.khaki.schoolwatch.localization.EnglishStringResources
 import org.khaki.schoolwatch.localization.JapaneseStringResources
 import org.khaki.schoolwatch.localization.Language
 import org.khaki.schoolwatch.localization.ProvideStringResources
+import org.khaki.schoolwatch.screens.clock.ClockScreen
+import org.khaki.schoolwatch.screens.settings.SettingsScreen
 import org.khaki.schoolwatch.theme.DraculaTheme
 
 enum class Screen {
