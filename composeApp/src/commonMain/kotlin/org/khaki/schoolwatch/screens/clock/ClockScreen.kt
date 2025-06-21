@@ -20,6 +20,7 @@ fun ClockScreen(
     tasks: List<Task>,
     schedules: List<Schedule>,
     showSushi: Boolean,
+    shortComment: String,
     onTaskCheckedChange: (Task, Boolean) -> Unit,
     onTaskDelete: (Task) -> Unit,
     onSettingsClick: () -> Unit
@@ -44,6 +45,7 @@ fun ClockScreen(
             dateString = clockTicker.currentDate.value,
             tasks = tasks,
             schedules = schedules,
+            shortComment = shortComment,
             onTaskCheckedChange = onTaskCheckedChange,
             onTaskDelete = onTaskDelete,
             onSettingsClick = onSettingsClick

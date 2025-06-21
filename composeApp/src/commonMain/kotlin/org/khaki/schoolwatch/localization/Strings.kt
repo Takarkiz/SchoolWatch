@@ -38,6 +38,9 @@ interface StringResources {
     val addSchedule: String
     val currentSchedules: String
     val noSchedules: String
+    val shortComment: String
+    val shortCommentHint: String
+    val setShortComment: String
 
     // Digital Clock Display
     fun nextSchedule(time: String, title: String): String
@@ -91,6 +94,9 @@ class JapaneseStringResources : StringResources {
     override val addSchedule = "スケジュールを追加"
     override val currentSchedules = "現在のスケジュール一覧"
     override val noSchedules = "スケジュールはありません。上記フォームから追加してください。"
+    override val shortComment = "一言コメント"
+    override val shortCommentHint = "一言コメントを入力…"
+    override val setShortComment = "コメントを設定"
 
     // Digital Clock Display
     override fun nextSchedule(time: String, title: String) = "次の予定: $time $title"
@@ -145,6 +151,9 @@ class EnglishStringResources : StringResources {
     override val addSchedule = "Add schedule"
     override val currentSchedules = "Current Schedules"
     override val noSchedules = "No schedules. Please add from the form above."
+    override val shortComment = "Short Comment"
+    override val shortCommentHint = "Enter a short comment..."
+    override val setShortComment = "Set Comment"
 
     // Digital Clock Display
     override fun nextSchedule(time: String, title: String) = "Next schedule: $time $title"

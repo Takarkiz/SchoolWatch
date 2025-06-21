@@ -5,20 +5,27 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -40,9 +47,13 @@ fun SettingsScreen(
     onShowSushiChange: (Boolean) -> Unit,
     language: Language = Language.JAPANESE,
     onLanguageChange: (Language) -> Unit = {},
+    shortComment: String,
+    onShortCommentChange: (String) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var currentShortComment by remember { mutableStateOf(shortComment) }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -72,6 +83,28 @@ fun SettingsScreen(
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.Start
             ) {
+                // Short Comment Section
+                Text(
+                    text = stringResource().shortComment,
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                OutlinedTextField(
+                    value = currentShortComment,
+                    onValueChange = { currentShortComment = it },
+                    label = { Text(stringResource().shortCommentHint) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(
+                    onClick = { onShortCommentChange(currentShortComment) },
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Text(stringResource().setShortComment)
+                }
+
+                Spacer(modifier = Modifier.height(32.dp))
+
                 // App Settings Section
                 AppSettingsSection(
                     showSushi = showSushi,
@@ -119,6 +152,8 @@ private fun PreviewSettingsScreen() {
             onAddSchedule = { _, _, _ -> },
             showSushi = true,
             onShowSushiChange = { _ -> },
+            shortComment = "This is a short comment",
+            onShortCommentChange = { _ -> },
             onBackClick = {}
         )
     }
