@@ -32,6 +32,7 @@ fun App() {
         val schedules = remember { mutableStateListOf<Schedule>() }
         var showSushi by remember { mutableStateOf(false) }
         var language by remember { mutableStateOf(Language.JAPANESE) }
+        var shortComment by remember { mutableStateOf("") }
         val stringResources = remember(language) {
             when (language) {
                 Language.JAPANESE -> JapaneseStringResources()
@@ -61,6 +62,7 @@ fun App() {
                         tasks = tasks,
                         schedules = schedules,
                         showSushi = showSushi,
+                        shortComment = shortComment,
                         onTaskCheckedChange = { task, isChecked ->
                             val index = tasks.indexOf(task)
                             if (index != -1) {
@@ -91,6 +93,10 @@ fun App() {
                         language = language,
                         onLanguageChange = { newLanguage ->
                             language = newLanguage
+                        },
+                        shortComment = shortComment,
+                        onShortCommentChange = { newComment ->
+                            shortComment = newComment
                         },
                         onBackClick = { currentScreen = Screen.CLOCK }
                     )

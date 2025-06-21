@@ -1,5 +1,7 @@
 package org.khaki.schoolwatch
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,6 +10,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Icon
@@ -17,12 +22,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.khaki.schoolwatch.localization.stringResource
 import org.khaki.schoolwatch.theme.DraculaTheme
+import schoolwatchproject.composeapp.generated.resources.Res
+import schoolwatchproject.composeapp.generated.resources.khaki_profile
 
 @Composable
 fun DigitalClockDisplay(
@@ -32,6 +41,7 @@ fun DigitalClockDisplay(
     dateString: String,
     tasks: List<Task>,
     schedules: List<Schedule>,
+    shortComment: String,
     onTaskCheckedChange: (Task, Boolean) -> Unit,
     onTaskDelete: (Task) -> Unit,
     onSettingsClick: () -> Unit = {},
@@ -57,6 +67,31 @@ fun DigitalClockDisplay(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            if (shortComment.isNotEmpty()) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .clip(RoundedCornerShape(8.dp)) // 吹き出し全体の角を丸める
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .padding(horizontal = 12.dp, vertical = 8.dp)
+                ) {
+                    Image(
+                        painter = painterResource(Res.drawable.khaki_profile),
+                        contentDescription = "User icon",
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape),
+                    )
+                    Text(
+                        text = shortComment,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+
             Row(verticalAlignment = Alignment.CenterVertically) {
                 val commonTimeStyle = MaterialTheme.typography.displayLarge.copy(
                     fontSize = 80.sp,
@@ -115,14 +150,20 @@ fun DigitalClockDisplay(
                 if (minutesUntilSchedule < 30) {
                     // Display countdown in red when less than 30 minutes remain
                     Text(
-                        text = stringResource().minutesUntilSchedule(nearestSchedule.title, minutesUntilSchedule),
+                        text = stringResource().minutesUntilSchedule(
+                            nearestSchedule.title,
+                            minutesUntilSchedule
+                        ),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.error // Using error color which is typically red
                     )
                 } else {
                     // Regular schedule display
                     Text(
-                        text = stringResource().nextSchedule(nearestSchedule.getTimeString(), nearestSchedule.title),
+                        text = stringResource().nextSchedule(
+                            nearestSchedule.getTimeString(),
+                            nearestSchedule.title
+                        ),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -163,6 +204,7 @@ private fun PreviewDigitalClockDisplay() {
             dateString = "2023年10月31日 (火)",
             tasks = previewTasks,
             schedules = previewSchedules,
+            shortComment = "This is a short comment!",
             onTaskCheckedChange = { _, _ -> },
             onTaskDelete = { _ -> },
             onSettingsClick = {}
